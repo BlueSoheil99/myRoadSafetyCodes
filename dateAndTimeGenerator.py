@@ -34,8 +34,14 @@ def create_full_times():
 
 
 def get_date_and_times_in_a_period(startDateAndTime, endDateAndTime):
+    """
+    parameters should have a syntax like: '1395/02/15 23:00:00'
+    :param startDateAndTime:
+    :param endDateAndTime:
+    :return: a list of full times between specified date and times + 1hour after ending date and time
+    """
     date_and_times = pd.read_excel('fullTimes.xlsx', header=None)
     date_and_times = date_and_times[0].tolist()
     index1 = date_and_times.index(startDateAndTime)
     index2 = date_and_times.index(endDateAndTime)
-    return date_and_times[index1:index2 + 1]
+    return date_and_times[index1:index2 + 2]
