@@ -2,13 +2,10 @@ import os
 import pandas as pd
 import dayCleaner
 
-
 os.chdir(r'D:\Educational\proje\data')
 province_dir = r'traffic\gilan95'
 goal = 'Hourly 543160'  # specified text that we look for in file names
 output_address = province_dir + r'\543160-95-KouchesfahanToRasht-تست.xlsx'
-
-
 
 list_of_goal_files = []
 files = os.walk(province_dir + r'\raw data')  # location of the main Folder of raw data
@@ -27,7 +24,7 @@ data.columns = ['code', 'mehvar', 'start', 'end', 'interval', 'total observed', 
                 'total estimated']
 
 for index, row in data.iterrows():
-    if row.tolist().count('کد محور'):
+    if row.tolist().count('کد محور') > 0:
         data = data.drop([index])
 
 data.reset_index(drop=True, inplace=True)

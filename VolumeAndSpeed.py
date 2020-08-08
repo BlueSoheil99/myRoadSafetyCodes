@@ -3,11 +3,9 @@ import numpy as np
 from scipy.stats import skew
 import os
 
-
 os.chdir(r'D:\Educational\proje\data')
 input_address = r'traffic\gilan95\543451-95-AstanehToLahijan.xlsx'
 routeCode = '543451'
-
 
 output_address = input_address[:-5] + '-proff.xlsx'
 Traffic = pd.read_excel(input_address)
@@ -49,6 +47,7 @@ Code = []
 days_with_missing_hours = []
 days_with_missing_minutes = []
 
+
 # todo : don't forget to fix missing values
 ########################
 ########################
@@ -69,11 +68,22 @@ def handle_previous_date():
     DailyTraffic.append(np.sum(totalVehicles))
     TruckPercentages.append(round(np.sum(totalHeavyVehicles) / np.sum(totalVehicles) * 100, 2))
     DT_variation.append(round(np.var(totalVehicles)))
-    AverageSpeeds.append(round(np.mean(speeds), 2))
+    AverageSpeeds.append(round(np.mean(speeds), 2))  # todo: weight mean
     SpeedVariation.append(round(np.var(speeds), 2))
-    # TODO
     SpeedSkewness.append(skew(speeds))
     DT_Skewness.append(skew(totalVehicles))
+
+
+# def weighted_avg_and_std(values, weights):
+#     """
+#     Return the weighted average and standard deviation.
+#
+#     values, weights -- Numpy ndarrays with the same shape.
+#     """
+#     average = np.average(values, weights=weights)
+#     # Fast and numerically precise:
+#     variance = np.average((values - average) ** 2, weights=weights)
+#     return (average, math.sqrt(variance))
 
 
 def add_info_to_daily_details(rowNumber, selectedDate):
@@ -116,4 +126,4 @@ data = pd.DataFrame(
      'DT_skewness': DT_Skewness, 'TruckPercentage': TruckPercentages, 'AverageSpeed': AverageSpeeds,
      'SpeedVariation': SpeedVariation, 'SpeedSkewness': SpeedSkewness})
 
-data.to_excel(output_address)
+# data.to_excel(output_address)
