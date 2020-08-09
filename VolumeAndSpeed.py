@@ -4,13 +4,13 @@ from scipy.stats import skew
 import os
 
 os.chdir(r'D:\Educational\proje\data')
-input_address = r'traffic\gilan95\543451-95-AstanehToLahijan.xlsx'
-routeCode = '543451'
+input_address = r'traffic\gilan95\543454-95-AstanehToKouchesfahan.xlsx'
+routeCode = '543454'
+output_address = input_address[:-5] + '-pro.xlsx'
 
-output_address = input_address[:-5] + '-proff.xlsx'
+########################
+########################
 Traffic = pd.read_excel(input_address)
-########################
-########################
 Start = Traffic['start'].tolist()
 End = Traffic['end'].tolist()
 TotalObserved = Traffic['total observed'].tolist()
@@ -48,7 +48,6 @@ days_with_missing_hours = []
 days_with_missing_minutes = []
 
 
-# todo : don't forget to fix missing values
 ########################
 ########################
 
@@ -67,23 +66,16 @@ def handle_previous_date():
     Dates.append(currentDate)
     DailyTraffic.append(np.sum(totalVehicles))
     TruckPercentages.append(round(np.sum(totalHeavyVehicles) / np.sum(totalVehicles) * 100, 2))
-    DT_variation.append(round(np.var(totalVehicles)))
-    AverageSpeeds.append(round(np.mean(speeds), 2))  # todo: weight mean
-    SpeedVariation.append(round(np.var(speeds), 2))
-    SpeedSkewness.append(skew(speeds))
+    DT_variation.append(round(np.var(totalVehicles)**0.5))
     DT_Skewness.append(skew(totalVehicles))
 
+    mean_speed = np.average(speeds, weights=totalVehicles)
+    AverageSpeeds.append(round(mean_speed, 2))
 
-# def weighted_avg_and_std(values, weights):
-#     """
-#     Return the weighted average and standard deviation.
-#
-#     values, weights -- Numpy ndarrays with the same shape.
-#     """
-#     average = np.average(values, weights=weights)
-#     # Fast and numerically precise:
-#     variance = np.average((values - average) ** 2, weights=weights)
-#     return (average, math.sqrt(variance))
+    speed_std = (np.average((speeds - mean_speed)**2, weights=totalVehicles)*len(speeds)/(len(speeds)-1)) ** .5  # Sample
+    skewness = np.average((speeds-mean_speed)**3/speed_std**3, weights=totalVehicles)*(len(speeds) ** 2)/((len(speeds)-1)*(len(speeds)-2))
+    SpeedVariation.append(round(speed_std, 2))
+    SpeedSkewness.append(round(skewness, 2))
 
 
 def add_info_to_daily_details(rowNumber, selectedDate):
@@ -117,7 +109,7 @@ for i in range(len(Start)):
         currentDate = selectedDate
         add_info_to_daily_details(i, selectedDate)
         hours = 1
-
+handle_previous_date()  # for the last day of year
 print("missing hours in:\n", days_with_missing_hours)
 print("missing minutes in:\n", days_with_missing_minutes)
 
@@ -126,4 +118,4 @@ data = pd.DataFrame(
      'DT_skewness': DT_Skewness, 'TruckPercentage': TruckPercentages, 'AverageSpeed': AverageSpeeds,
      'SpeedVariation': SpeedVariation, 'SpeedSkewness': SpeedSkewness})
 
-# data.to_excel(output_address)
+data.to_excel(output_address)

@@ -39,18 +39,7 @@ def clean_dataset(dataframe):
             new_dis_vio[j], new_speed_vio[j], new_over_vio[j] = dis_vio[i], speed_vio[i], over_vio[i]
 
     ######## cleat invalid data in new lists #########
-
-    # new_total_estimated = [int(i) for i in new_total_estimated]
-    # new_class1 = [int(i) for i in new_class1]
-    # new_class2 = [int(i) for i in new_class2]
-    # new_class3 = [int(i) for i in new_class3]
-    # new_class4 = [int(i) for i in new_class4]
-    # new_class5 = [int(i) for i in new_class5]
-    # new_avg_s = [float(i) for i in new_avg_s]
-    # new_dis_vio = [int(i) for i in new_dis_vio]
-    # new_speed_vio = [int(i) for i in new_speed_vio]
-    # new_over_vio = [int(i) for i in new_over_vio]
-
+    #todo: check when a month a missed
     for i in range(len(new_total_estimated)):
         if new_total_estimated[i] == 0:  # this indicates an empty hour with zero values
             dt_b, dt_a = 0, 0
@@ -92,7 +81,7 @@ def clean_dataset(dataframe):
                 new_speed_vio[i] = int((speed_vio_b + speed_vio_a) / 2)
                 new_over_vio[i] = int((over_vio_b + over_vio_a) / 2)
                 new_dis_vio[i] = int((dis_vio_b + dis_vio_a) / 2)
-                new_avg_s[i] = np.average([avg_s_b, avg_s_a], weights=[dt_b, dt_a])
+                new_avg_s[i] = round(np.average([avg_s_b, avg_s_a], weights=[dt_b, dt_a]), 2)
 
             elif dt_a != 0:
                 new_class1[i] = class1_a
@@ -117,48 +106,6 @@ def clean_dataset(dataframe):
 
             new_total_estimated[i] = new_class1[i] + new_class2[i] + new_class3[i] + new_class4[i] + new_class5[i]
 
-    # for i in range(len(new_class1)):
-    #     if new_class1[i] == 0:
-    #         dt_b = 0
-    #         dt_a = 0
-    #         for j in [168, 167, 169]:
-    #             if i + j < len(new_class1):
-    #                 if new_class1[i + j] != 0:
-    #                     dt_b = new_class1[i + j]
-    #                     break
-    #         for j in [168, 167, 169]:
-    #             if i - j > 1:
-    #                 if new_class1[i - j] != 0:
-    #                     dt_a = new_class1[i - j]
-    #                     break
-    #         if dt_a != 0 and dt_b != 0:
-    #             new_class1[i] = int((dt_b + dt_a) / 2)
-    #         elif dt_a != 0:
-    #             new_class1[i] = int(dt_a)
-    #         elif dt_b != 0:
-    #             new_class1[i] = int(dt_b)
-
-    # for i in range(len(new_avg_s)):
-    #     if new_avg_s[i] == 0:
-    #         dt_b = 0
-    #         dt_a = 0
-    #         for j in [168, 167, 169]:
-    #             if i + j < len(new_avg_s):
-    #                 if new_avg_s[i + j] != 0:
-    #                     dt_b = new_avg_s[i + j]
-    #                     break
-    #         for j in [168, 167, 169]:
-    #             if i - j > 1:
-    #                 if new_avg_s[i - j] != 0:
-    #                     dt_a = new_avg_s[i - j]
-    #                     break
-    #         if dt_a != 0 and dt_b != 0:
-    #             new_avg_s[i] = (dt_b + dt_a) / 2  # میانگین وزنی باید باشه
-    #         elif dt_a != 0:
-    #             new_avg_s[i] = dt_a
-    #         elif dt_b != 0:
-    #             new_avg_s[i] = dt_b
-
     ######## making a new frameWork #########
     Code = [Code[0]] * len(new_start)
     Mehvar = [Mehvar[0]] * len(new_start)
@@ -169,7 +116,6 @@ def clean_dataset(dataframe):
          'distance violation': new_dis_vio, 'overtaking violation': new_over_vio,
          'total estimated': new_total_estimated})
     return new_dataframe
-    # return dataframe
 
 
 def hourly_adjust(row):
@@ -188,32 +134,6 @@ def hourly_adjust(row):
     row['class5'] = round(row['class5'] * 60 / interval)
     row['total estimated'] = row['class1'] + row['class2'] + row['class3'] + row['class4'] + row['class5']
     return row
-
-
-def date_extractor(dateAndTime):
-    ans_list = dateAndTime.split(" ")
-    ans_list = ans_list[0].split("/")
-    return ans_list
-
-
-def time_extractor(dateAndTime):
-    ans_list = dateAndTime.split(" ")
-    ans_list = ans_list[1].split(":")
-    return ans_list
-
-
-def are_times_equal(timeList1, timeList2):
-    for i in range(len(timeList2)):  # both time lists must have similar length(we just use hour and minute(len=2))
-        if timeList1[i] != timeList2[i]:
-            return False
-    return True
-
-
-def are_dates_equal(dateList1, dateList2):
-    for i in range(3):  # both dateLists must have similar length(3)
-        if dateList1[i] != dateList2[i]:
-            return False
-    return True
 
 ########## test and debug code start ####################
 

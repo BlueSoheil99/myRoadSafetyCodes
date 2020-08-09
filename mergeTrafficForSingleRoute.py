@@ -2,10 +2,12 @@ import os
 import pandas as pd
 import dayCleaner
 
+# input section
 os.chdir(r'D:\Educational\proje\data')
 province_dir = r'traffic\gilan95'
-goal = 'Hourly 543160'  # specified text that we look for in file names
-output_address = province_dir + r'\543160-95-KouchesfahanToRasht-تستی .xlsx'
+goal = 'Hourly 543451'  # specific text that we look for in file names
+output_address = province_dir + r'\543451-95-AstanehToLahijan.xlsx'
+
 
 list_of_goal_files = []
 files = os.walk(province_dir + r'\raw data')  # location of the main Folder of raw data
