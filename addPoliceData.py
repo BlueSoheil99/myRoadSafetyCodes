@@ -28,9 +28,42 @@ def aggregate_police_data(police_path):
     dates = dateAndTimeGenerator.get_full_dates_of_a_year(year)
     multi, single, not_severe, severe = dict(), dict(), dict(), dict()
     for date in dates:
-        pass
+        multi[date] = 0
+        single[date] = 0
+        not_severe[date] = 0
+        severe[date] = 0
 
-    new_data = pd.DataFrame([0, 0, 0])
+    def get_date_in_string(police_date):
+        police_date = police_date.split('/')
+        day = police_date[2]
+        month = police_date[1]
+        year = police_date[0]
+        if len(day) == 1:
+            day = '0' + day
+        if len(month) == 1:
+            month = '0' + month
+        if len(year) == 2:
+            year = '13' + year
+        return '/'.join([year, month, day])
+
+    for index, row in data.iterrows():
+        date = get_date_in_string(row['تاريخ تصادف'])
+        multi[date] += row['multi']
+        single[date] += row['single']
+        not_severe[date] += row['property']
+        severe[date] += row['severe']
+
+    total_crashes, multi_crashes, single_crashes, not_severe_crashes, severe_crashes = [[] for i in range(5)]
+    for i in range(len(dates)):
+        multi_crashes.append(multi[dates[i]])
+        single_crashes.append(single[dates[i]])
+        severe_crashes.append(severe[dates[i]])
+        not_severe_crashes.append(not_severe[dates[i]])
+        total_crashes.append(multi_crashes[i] + single_crashes[i])
+
+    new_data = pd.DataFrame({'date': dates, 'total crashes': total_crashes, 'single vehicle crashes': single_crashes,
+                             'multi vehicle crashes': multi_crashes, 'property damage only crashes': not_severe_crashes,
+                             'injury crashes': severe_crashes, })
     # saving a new sheet in police excel file
     book = load_workbook(police_path)
     writer = pd.ExcelWriter(police_path, engine='openpyxl')
@@ -52,4 +85,4 @@ os.chdir(police_and_traffic_dir)
 police_dir = find_police_dir(route_code)
 traffic_dir = find_traffic_dir(route_code)
 aggregate_police_data(police_dir)
-merge_police_and_traffic(police_dir, traffic_dir)
+# merge_police_and_traffic(police_dir, traffic_dir)
