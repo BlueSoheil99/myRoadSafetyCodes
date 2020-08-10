@@ -1,8 +1,15 @@
 import pandas as pd
-import numpy as np
 from openpyxl import load_workbook
 import dateAndTimeGenerator
 import os
+
+"""
+to use this code first you need to have both traffic and police data in same folder just like 
+'543110-95-RashtToKouchesfahan-police.xlsx' and '543110-95-RashtToKouchesfahan-pro.xlsx' present in code directory,
+make traffic daily data using other codes here but then add holidays,seasons,road geometrics manually.
+also making police worksheets should also be handled manually
+
+"""
 
 police_and_traffic_dir = r'D:\Educational\proje\data\extracted data\rasht-lahijan'
 route_code = '543110'
@@ -74,15 +81,22 @@ def aggregate_police_data(police_path):
 
 
 def merge_police_and_traffic(police_path, traffic_path):
+    # police_data = pd.read_excel(police_path, sheet_name='aggregated', usecols="C:G")
+    # traffic_data = pd.read_excel(traffic_path, usecols="B:Y")
+    # to use 'usecols=",,," ' we should be always be aware of police and traffic data attributes(if we decide to add or
+    # remove a column in making these databases, we should adjust lines above too) but with drop
     police_data = pd.read_excel(police_path, sheet_name='aggregated')
     traffic_data = pd.read_excel(traffic_path)
+    police_data.drop(police_data.columns[0:2], axis=1, inplace=True)
+    traffic_data.drop(traffic_data.columns[0], axis=1, inplace=True)
 
-    new_data = pd.DataFrame()
+    new_data = pd.concat([traffic_data, police_data], axis=1)
     new_data.to_excel(traffic_path)
 
 
+# def aggregate_police_data_and_merge_with_traffic(police_and_traffic_dir, route_code):
 os.chdir(police_and_traffic_dir)
 police_dir = find_police_dir(route_code)
 traffic_dir = find_traffic_dir(route_code)
 aggregate_police_data(police_dir)
-# merge_police_and_traffic(police_dir, traffic_dir)
+merge_police_and_traffic(police_dir, traffic_dir)
