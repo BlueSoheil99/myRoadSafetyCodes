@@ -1,11 +1,12 @@
 import pandas as pd
+from ordered_set import OrderedSet  # https://pypi.org/project/ordered-set/
 import os
 
 os.chdir(r"D:\Educational\proje\data")
 
 
 def create_full_times():
-    sample = pd.read_excel('fullTimesSample.xlsx', header=None) # sample should have full times of one month
+    sample = pd.read_excel('fullTimesSample.xlsx', header=None)  # sample should have full times of one month
     sample = sample[0].tolist()
 
     months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
@@ -45,3 +46,18 @@ def get_date_and_times_in_a_period(startDateAndTime, endDateAndTime):
     index1 = date_and_times.index(startDateAndTime)
     index2 = date_and_times.index(endDateAndTime)
     return date_and_times[index1:index2 + 2]
+
+
+def get_full_dates_of_a_year(year):
+    """
+    :param year: a string like : '1395'
+    :return: a list of strings containing the dates in given year
+    """
+    dates = OrderedSet()
+    date_and_times = pd.read_excel(r"D:\Educational\proje\data\fullTimes.xlsx", header=None)
+    date_and_times = date_and_times[0].tolist()
+    for date_and_time in date_and_times:
+        if year in date_and_time:
+            dates.add(date_and_time.split(" ")[0])
+    list_of_dates = [i for i in dates]
+    return list_of_dates
