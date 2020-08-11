@@ -3,6 +3,9 @@ from openpyxl import load_workbook
 import dateAndTimeGenerator
 import os
 
+# TODO: appending seasons and holiday happens here. write the code and
+#  change the file name into addPoliceAndHolidayData.py later
+
 """
 to use this code first you need to have both traffic and police data in same folder just like 
 '543110-95-RashtToKouchesfahan-police.xlsx' and '543110-95-RashtToKouchesfahan-pro.xlsx' present in code directory,
