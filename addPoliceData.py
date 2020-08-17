@@ -1,6 +1,7 @@
 import pandas as pd
 from openpyxl import load_workbook
 import dateAndTimeGenerator
+import outlier_detector
 import os
 
 # TODO: appending seasons and holiday happens here. write the code and
@@ -33,6 +34,8 @@ def find_police_dir(code):
 
 
 def aggregate_police_data(police_path):
+    # takes a "processed" sheet, generates an "aggregated" sheet
+
     data = pd.read_excel(police_path, sheet_name='processed')
     year = '13' + police_path[7:9]  # police path format: $$$$$$-$$-routeDirection-police.xlsx
     dates = dateAndTimeGenerator.get_full_dates_of_a_year(year)
@@ -94,7 +97,11 @@ def merge_police_and_traffic(police_path, traffic_path):
     traffic_data.drop(traffic_data.columns[0], axis=1, inplace=True)
 
     new_data = pd.concat([traffic_data, police_data], axis=1)
-    new_data.to_excel(traffic_path)
+    # new_data.to_excel(traffic_path)
+
+    output_path = traffic_path[:-8] + 'merged.xlsx'  # 8 is because that 'pro.xlsx' has 8 chars
+    clean_data = outlier_detector.scan(new_data)
+    clean_data.to_excel(output_path)
 
 
 # def aggregate_police_data_and_merge_with_traffic(police_and_traffic_dir, route_code):
