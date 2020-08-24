@@ -18,5 +18,6 @@ for i in range(len(dataframes) - 1):
             break
 
 data = pd.concat(dataframes)
+#todo calculate segment dummies (add <<#of segments -1 >>dummy variables)
 data.reset_index(drop=True, inplace=True)
 data.to_excel(data_path + r'\model_soup.xlsx')

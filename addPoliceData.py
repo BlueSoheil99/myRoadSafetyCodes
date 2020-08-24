@@ -1,7 +1,6 @@
 import pandas as pd
 from openpyxl import load_workbook
 import dateAndTimeGenerator
-import outlier_detector
 import os
 
 # TODO: appending seasons and holiday happens here. write the code and
@@ -16,7 +15,7 @@ also making police worksheets should also be handled manually
 """
 
 police_and_traffic_dir = r'D:\Educational\proje\data\extracted data\rasht-lahijan'
-route_code = '543110'
+route_code = '543401'
 
 
 def find_traffic_dir(code):
@@ -100,6 +99,8 @@ def merge_police_and_traffic(police_path, traffic_path):
     # new_data.to_excel(traffic_path)
 
     output_path = traffic_path[:-8] + 'merged.xlsx'  # 8 is because that 'pro.xlsx' has 8 chars
+
+    import outlier_detector
     clean_data = outlier_detector.scan(new_data)
     clean_data.to_excel(output_path)
 

@@ -51,7 +51,7 @@ def get_date_and_times_in_a_period(startDateAndTime, endDateAndTime):
 def get_full_dates_of_a_year(year):
     """
     :param year: a string like : '1395'
-    :return: a list of strings containing the dates in given year
+    :return: a list of strings containing the outlier_dates in given year
     """
     dates = OrderedSet()
     date_and_times = pd.read_excel(r"D:\Educational\proje\data\fullTimes.xlsx", header=None)
