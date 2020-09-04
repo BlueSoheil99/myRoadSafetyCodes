@@ -4,9 +4,9 @@ import dayCleaner
 
 # input section
 os.chdir(r'D:\Educational\proje\data')
-province_dir = r'traffic\gilan95'
-goal = 'Hourly 543451'  # specific text that we look for in file names
-output_address = province_dir + r'\543451-95-AstanehToLahijan.xlsx'
+province_dir = r'traffic\gilan96'
+goal = 'Hourly 543301'  # specific text that we look for in file names
+output_address = province_dir + r'\543301-96-KhomamToAnzali.xlsx'
 
 
 list_of_goal_files = []

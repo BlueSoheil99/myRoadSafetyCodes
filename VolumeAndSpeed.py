@@ -4,9 +4,9 @@ from scipy.stats import skew
 import os
 
 os.chdir(r'D:\Educational\proje\data')
-input_address = r'traffic\gilan95\543454-95-AstanehToKouchesfahan.xlsx'
-routeCode = '543454'
-output_address = input_address[:-5] + '-pro.xlsx'
+input_address = r'traffic\gilan96\543461-96-KhomamToRasht.xlsx'
+routeCode = '543461'
+output_address = input_address[:-5] + '-traffic.xlsx'
 
 ########################
 ########################
@@ -67,7 +67,7 @@ def handle_previous_date():
     DailyTraffic.append(np.sum(totalVehicles))
     TruckPercentages.append(round(np.sum(totalHeavyVehicles) / np.sum(totalVehicles) * 100, 2))
     DT_variation.append(round(np.var(totalVehicles)**0.5))
-    DT_Skewness.append(skew(totalVehicles))
+    DT_Skewness.append(round(skew(totalVehicles), 3))
 
     mean_speed = np.average(speeds, weights=totalVehicles)
     AverageSpeeds.append(round(mean_speed, 2))
@@ -75,7 +75,7 @@ def handle_previous_date():
     speed_std = (np.average((speeds - mean_speed)**2, weights=totalVehicles)*len(speeds)/(len(speeds)-1)) ** .5  # Sample
     skewness = np.average((speeds-mean_speed)**3/speed_std**3, weights=totalVehicles)*(len(speeds) ** 2)/((len(speeds)-1)*(len(speeds)-2))
     SpeedVariation.append(round(speed_std, 2))
-    SpeedSkewness.append(round(skewness, 2))
+    SpeedSkewness.append(round(skewness, 3))
 
 
 def add_info_to_daily_details(rowNumber, selectedDate):

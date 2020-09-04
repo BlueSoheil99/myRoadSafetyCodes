@@ -15,7 +15,7 @@ also making police worksheets should also be handled manually
 """
 
 police_and_traffic_dir = r'D:\Educational\proje\data\extracted data\rasht-lahijan'
-route_code = '543401'
+route_code = '543451'
 
 
 def find_traffic_dir(code):
@@ -103,6 +103,7 @@ def merge_police_and_traffic(police_path, traffic_path):
     import outlier_detector
     clean_data = outlier_detector.scan(new_data)
     clean_data.to_excel(output_path)
+    # new_data.to_excel(output_path)
 
 
 # def aggregate_police_data_and_merge_with_traffic(police_and_traffic_dir, route_code):
