@@ -3,7 +3,7 @@ import os
 
 '''
 this code merges all crashes of selected provinces into one single excel file
-
+the run time is not efficient enough, you'd better use police_aggregator.py and then filter its output via excel
 '''
 
 province_name = 'گيلان'
@@ -16,7 +16,7 @@ output_directory = 'extracted data'
 police_database_address = r'police'
 
 os.chdir(_dir)
-dataframes_to_concat = []
+dataframes_to_concat = []  # we don't really need that
 source_dataframes = [pd.read_excel(input_directory + '\\' + i) for i in os.listdir(input_directory)]
 # wait for an hour to fully execute this shit:)
 # source_dataframes = []
@@ -43,6 +43,7 @@ for dataframe in source_dataframes:  # filtering data
         if row['استان'] != province_name and row['استان'] != 'استان':
             # print('a row with '+row['استان'] + ' was deleted')
             dataframe = dataframe.drop([index])
+        # you'd better make a new dataframe and this rows to that
     dataframes_to_concat.append(dataframe)  # check this dataframe wont change in next iterations
 
 for i in range(len(dataframes_to_concat) - 1):

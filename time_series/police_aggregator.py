@@ -8,9 +8,9 @@ this code merges all crashes of country into one single excel file
 renames province names into English
 '''
 
-output_name = 'merge_whole_police.xlsx'
+output_name = 'merge_police.xlsx'
 _dir = r'D:\Educational\proje\data\police'  # root directory
-input_directory = 'train data'
+input_directory = 'similar police data'
 # input directory should contain ONLY one-year police excel source_dataframes in ONE specific format.
 output_directory = 'extracted data'
 
@@ -43,7 +43,8 @@ for dataframe in source_dataframes:
         print(row['استان'])    # log # hmmm the row won't change but dataframe actually changes so we are fine!
         print("--- --- --- ---")  # log
 
-
+# todo : write a code to turn crash causes into English using the same dictionary
+# todo : turn columns into English
 data = pd.concat(source_dataframes)
 del row, index, dataframe
 source_dataframes.clear()
